@@ -17,6 +17,8 @@
     "typecheck": "tsc --noEmit",
     "preview": "tsx scripts/preview-grants.ts",
     "setup:search": "tsx scripts/setup-search.ts",
+    "setup:agent": "tsx scripts/setup-agent.ts",
+    "chat": "tsx scripts/chat.ts",
     "query": "tsx scripts/query.ts"
   },
   "dependencies": {
@@ -28,6 +30,7 @@
     "@types/node": "^22.20.4",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2",
-    "vitest": "^5.0.1"
+    "vitest": "^5.0.1",
+    "yaml": "^2.9.1"
   }
 }

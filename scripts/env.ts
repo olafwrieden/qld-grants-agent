@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { parse as parseYaml } from 'yaml';
 
 const ENV_FILE = resolve(process.cwd(), '.env');
 
@@ -53,7 +54,7 @@ export function loadScriptEnv(): Record<string, string> {
   return env;
 }
 
-/** Replaces `${NAME}` placeholders in a JSON template with values from `env`. */
+/** Replaces `${NAME}` placeholders in a JSON or YAML template with values from `env`, then parses it. */
 export function renderTemplate(file: string, env: Record<string, string>): unknown {
   const raw = readFileSync(file, 'utf8');
   const rendered = raw.replace(/\$\{([A-Z0-9_]+)\}/g, (_, name: string) => {
@@ -61,7 +62,7 @@ export function renderTemplate(file: string, env: Record<string, string>): unkno
     if (value === undefined || value === '') throw new Error(`${file}: missing value for \${${name}}`);
     return value;
   });
-  return JSON.parse(rendered);
+  return /\.ya?ml$/i.test(file) ? parseYaml(rendered) : JSON.parse(rendered);
 }
 
 export function requireEnv(env: Record<string, string>, name: string): string {
