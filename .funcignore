@@ -1,0 +1,13 @@
+*.js.map
+*.ts
+.git*
+.vscode
+local.settings.json
+.env
+infra
+scripts
+search
+test
+tsconfig.json
+vitest.config.ts
+README.md

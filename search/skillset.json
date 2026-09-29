@@ -1,0 +1,30 @@
+{
+  "name": "${SEARCH_SKILLSET_NAME}",
+  "description": "Integrated vectorization of grant title and description via Microsoft Foundry.",
+  "skills": [
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "embed-title",
+      "description": "Embeds the grant title.",
+      "context": "/document",
+      "resourceUri": "${FOUNDRY_OPENAI_ENDPOINT}",
+      "deploymentId": "${EMBEDDING_DEPLOYMENT}",
+      "modelName": "${EMBEDDING_MODEL}",
+      "dimensions": ${EMBEDDING_DIMENSIONS},
+      "inputs": [{ "name": "text", "source": "/document/title" }],
+      "outputs": [{ "name": "embedding", "targetName": "titleVector" }]
+    },
+    {
+      "@odata.type": "#Microsoft.Skills.Text.AzureOpenAIEmbeddingSkill",
+      "name": "embed-description",
+      "description": "Embeds the grant summary (description).",
+      "context": "/document",
+      "resourceUri": "${FOUNDRY_OPENAI_ENDPOINT}",
+      "deploymentId": "${EMBEDDING_DEPLOYMENT}",
+      "modelName": "${EMBEDDING_MODEL}",
+      "dimensions": ${EMBEDDING_DIMENSIONS},
+      "inputs": [{ "name": "text", "source": "/document/summary" }],
+      "outputs": [{ "name": "embedding", "targetName": "descriptionVector" }]
+    }
+  ]
+}

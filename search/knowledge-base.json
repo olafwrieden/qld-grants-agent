@@ -1,0 +1,19 @@
+{
+  "name": "${KNOWLEDGE_BASE_NAME}",
+  "description": "FoundryIQ knowledge base for finding Queensland Government grants.",
+  "retrievalInstructions": "Use the grants knowledge source for any question about Queensland Government grants, funding, rebates, concessions, loans or assistance programs. Prefer grants that are currently open unless the user asks about closed or past programs.",
+  "answerInstructions": "Answer concisely. For each grant mention its title, whether it is open, the closing date and amount when known, and cite the source ref_id. If nothing relevant is found, say so.",
+  "outputMode": "answerSynthesis",
+  "knowledgeSources": [{ "name": "${KNOWLEDGE_SOURCE_NAME}" }],
+  "models": [
+    {
+      "kind": "azureOpenAI",
+      "azureOpenAIParameters": {
+        "resourceUri": "${FOUNDRY_OPENAI_ENDPOINT}",
+        "deploymentId": "${CHAT_DEPLOYMENT}",
+        "modelName": "${CHAT_MODEL}"
+      }
+    }
+  ],
+  "retrievalReasoningEffort": { "kind": "low" }
+}

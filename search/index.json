@@ -1,0 +1,97 @@
+{
+  "name": "${SEARCH_INDEX_NAME}",
+  "description": "Queensland Government grants and assistance programs (source: Grants Finder API).",
+  "fields": [
+    { "name": "id", "type": "Edm.String", "key": true, "filterable": true, "retrievable": true },
+    { "name": "title", "type": "Edm.String", "searchable": true, "sortable": true, "analyzer": "en.microsoft" },
+    { "name": "programName", "type": "Edm.String", "searchable": true, "filterable": true, "facetable": true, "sortable": true, "analyzer": "en.microsoft" },
+    { "name": "roundName", "type": "Edm.String", "searchable": true, "filterable": true, "analyzer": "en.microsoft" },
+    { "name": "summary", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft" },
+    { "name": "eligibility", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft" },
+    { "name": "howToApply", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft" },
+    { "name": "successNotification", "type": "Edm.String", "searchable": true, "analyzer": "en.microsoft" },
+    { "name": "url", "type": "Edm.String", "retrievable": true },
+    { "name": "deliveredBy", "type": "Edm.String", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "issuingAgency", "type": "Edm.String", "searchable": true, "filterable": true, "facetable": true, "sortable": true },
+    { "name": "status", "type": "Edm.String", "filterable": true, "facetable": true },
+    { "name": "isOpen", "type": "Edm.Boolean", "filterable": true, "facetable": true },
+    { "name": "openingDate", "type": "Edm.DateTimeOffset", "filterable": true, "facetable": true, "sortable": true },
+    { "name": "closingDate", "type": "Edm.DateTimeOffset", "filterable": true, "facetable": true, "sortable": true },
+    { "name": "amount", "type": "Edm.Double", "filterable": true, "facetable": true, "sortable": true },
+    { "name": "financialYearBudget", "type": "Edm.String", "filterable": true, "facetable": true },
+    { "name": "assistanceType", "type": "Edm.String", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "applicantTypes", "type": "Collection(Edm.String)", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "categories", "type": "Collection(Edm.String)", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "clientGroups", "type": "Collection(Edm.String)", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "fundingTypes", "type": "Collection(Edm.String)", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "businessActivities", "type": "Collection(Edm.String)", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "tagIds", "type": "Collection(Edm.String)", "filterable": true },
+    { "name": "sourceIds", "type": "Collection(Edm.String)", "filterable": true },
+    { "name": "contentHash", "type": "Edm.String", "filterable": true },
+    { "name": "lastChangedAt", "type": "Edm.DateTimeOffset", "filterable": true, "sortable": true },
+    {
+      "name": "titleVector",
+      "type": "Collection(Edm.Single)",
+      "searchable": true,
+      "retrievable": false,
+      "stored": false,
+      "dimensions": ${EMBEDDING_DIMENSIONS},
+      "vectorSearchProfile": "grants-vector-profile"
+    },
+    {
+      "name": "descriptionVector",
+      "type": "Collection(Edm.Single)",
+      "searchable": true,
+      "retrievable": false,
+      "stored": false,
+      "dimensions": ${EMBEDDING_DIMENSIONS},
+      "vectorSearchProfile": "grants-vector-profile"
+    }
+  ],
+  "vectorSearch": {
+    "algorithms": [
+      {
+        "name": "grants-hnsw",
+        "kind": "hnsw",
+        "hnswParameters": { "m": 8, "efConstruction": 400, "efSearch": 500, "metric": "cosine" }
+      }
+    ],
+    "vectorizers": [
+      {
+        "name": "grants-vectorizer",
+        "kind": "azureOpenAI",
+        "azureOpenAIParameters": {
+          "resourceUri": "${FOUNDRY_OPENAI_ENDPOINT}",
+          "deploymentId": "${EMBEDDING_DEPLOYMENT}",
+          "modelName": "${EMBEDDING_MODEL}"
+        }
+      }
+    ],
+    "profiles": [
+      { "name": "grants-vector-profile", "algorithm": "grants-hnsw", "vectorizer": "grants-vectorizer" }
+    ]
+  },
+  "semantic": {
+    "defaultConfiguration": "grants-semantic",
+    "configurations": [
+      {
+        "name": "grants-semantic",
+        "prioritizedFields": {
+          "titleField": { "fieldName": "title" },
+          "prioritizedContentFields": [
+            { "fieldName": "summary" },
+            { "fieldName": "eligibility" },
+            { "fieldName": "successNotification" }
+          ],
+          "prioritizedKeywordsFields": [
+            { "fieldName": "categories" },
+            { "fieldName": "applicantTypes" },
+            { "fieldName": "clientGroups" },
+            { "fieldName": "assistanceType" },
+            { "fieldName": "issuingAgency" }
+          ]
+        }
+      }
+    ]
+  }
+}

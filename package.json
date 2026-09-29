@@ -1,0 +1,33 @@
+{
+  "name": "qld-grants-agent",
+  "version": "0.1.0",
+  "description": "Indexes Queensland Government grants into Azure AI Search (FoundryIQ) for hybrid and agentic retrieval.",
+  "private": true,
+  "type": "module",
+  "main": "dist/functions/*.js",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "prestart": "npm run clean && npm run build",
+    "start": "func start",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "preview": "tsx scripts/preview-grants.ts",
+    "setup:search": "tsx scripts/setup-search.ts",
+    "query": "tsx scripts/query.ts"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.16.5",
+    "@azure/identity": "^4.13.3",
+    "@azure/storage-blob": "^12.34.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
+  }
+}

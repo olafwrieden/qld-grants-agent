@@ -1,0 +1,383 @@
+{
+ "applicationType": {
+  "id": "ApplicationType",
+  "title": "Which of the following best describes you?",
+  "description": "Tick all that apply",
+  "order": "1",
+  "response_type": "checkbox",
+  "funnels": [
+   {
+    "key": "1002",
+    "name": "Business, start-up or entrepreneur"
+   },
+   {
+    "key": "1003",
+    "name": "Community group/not for profit"
+   },
+   {
+    "key": "1006",
+    "name": "Government"
+   },
+   {
+    "key": "1001",
+    "name": "Individual seeking grant or assistance"
+   },
+   {
+    "key": "1004",
+    "name": "Local government"
+   },
+   {
+    "key": "1005",
+    "name": "Researcher/research institute"
+   }
+  ]
+ },
+ "category": {
+  "id": "Category",
+  "title": "What is the area of interest for your query today?",
+  "description": "Tick all that apply",
+  "order": "2",
+  "response_type": "checkbox",
+  "funnels": [
+   {
+    "key": "-2000",
+    "name": "Select All"
+   },
+   {
+    "key": "2001",
+    "name": "Aboriginal and Torres Strait Islander peoples"
+   },
+   {
+    "key": "2003",
+    "name": "Business and industry"
+   },
+   {
+    "key": "2004",
+    "name": "Community support"
+   },
+   {
+    "key": "2005",
+    "name": "Education and training"
+   },
+   {
+    "key": "2006",
+    "name": "Emergency services and safety"
+   },
+   {
+    "key": "2007",
+    "name": "Employment and jobs"
+   },
+   {
+    "key": "2008",
+    "name": "Environment, land and water"
+   },
+   {
+    "key": "2009",
+    "name": "Health and wellbeing"
+   },
+   {
+    "key": "2010",
+    "name": "Homes and housing"
+   },
+   {
+    "key": "2011",
+    "name": "Parents and families"
+   },
+   {
+    "key": "2012",
+    "name": "People with disability"
+   },
+   {
+    "key": "2002",
+    "name": "Queensland government"
+   },
+   {
+    "key": "2013",
+    "name": "Recreation, sport and arts"
+   },
+   {
+    "key": "2014",
+    "name": "Seniors"
+   },
+   {
+    "key": "2015",
+    "name": "Transport and motoring"
+   },
+   {
+    "key": "2016",
+    "name": "Victims, crime and the law"
+   },
+   {
+    "key": "2017",
+    "name": "Youth"
+   }
+  ]
+ },
+ "clientGroup": {
+  "id": "ClientGroup1",
+  "title": "Does your application relate to any of the following?",
+  "description": "Tick all that apply",
+  "order": "4",
+  "response_type": "checkbox",
+  "funnels": [
+   {
+    "key": "-3000",
+    "name": "Select All"
+   },
+   {
+    "key": "3026",
+    "name": "Aboriginal and Torres Strait Islanders"
+   },
+   {
+    "key": "3025",
+    "name": "All Queenslanders"
+   },
+   {
+    "key": "3013",
+    "name": "Businesses"
+   },
+   {
+    "key": "3027",
+    "name": "Carers"
+   },
+   {
+    "key": "3028",
+    "name": "Children under 16 years"
+   },
+   {
+    "key": "3014",
+    "name": "Commercial shipping"
+   },
+   {
+    "key": "3015",
+    "name": "Community groups"
+   },
+   {
+    "key": "3012",
+    "name": "Creative or performing arts"
+   },
+   {
+    "key": "3001",
+    "name": "Employees"
+   },
+   {
+    "key": "3002",
+    "name": "Employers"
+   },
+   {
+    "key": "3016",
+    "name": "Exporters"
+   },
+   {
+    "key": "3029",
+    "name": "Families"
+   },
+   {
+    "key": "3017",
+    "name": "Government"
+   },
+   {
+    "key": "3030",
+    "name": "Individuals"
+   },
+   {
+    "key": "3003",
+    "name": "Jobseekers"
+   },
+   {
+    "key": "3004",
+    "name": "Landholders"
+   },
+   {
+    "key": "3018",
+    "name": "Local government"
+   },
+   {
+    "key": "3031",
+    "name": "Low-income earners"
+   },
+   {
+    "key": "3032",
+    "name": "Migrants"
+   },
+   {
+    "key": "3005",
+    "name": "Motorists"
+   },
+   {
+    "key": "3019",
+    "name": "Non-government organisations"
+   },
+   {
+    "key": "3006",
+    "name": "People accessing health services"
+   },
+   {
+    "key": "3033",
+    "name": "People with disability"
+   },
+   {
+    "key": "3020",
+    "name": "Primary industry"
+   },
+   {
+    "key": "3007",
+    "name": "Public transport users"
+   },
+   {
+    "key": "3008",
+    "name": "Recreational boating"
+   },
+   {
+    "key": "3021",
+    "name": "Researchers/research institutes"
+   },
+   {
+    "key": "3009",
+    "name": "Rural communities"
+   },
+   {
+    "key": "3034",
+    "name": "Seniors over 65 years"
+   },
+   {
+    "key": "3011",
+    "name": "Sports participant"
+   },
+   {
+    "key": "3024",
+    "name": "Start-up/entrepreneur"
+   },
+   {
+    "key": "3035",
+    "name": "Students"
+   },
+   {
+    "key": "3022",
+    "name": "Taxi drivers and passengers"
+   },
+   {
+    "key": "3023",
+    "name": "Teachers"
+   },
+   {
+    "key": "3036",
+    "name": "Tourists"
+   },
+   {
+    "key": "3037",
+    "name": "Veterans and family"
+   },
+   {
+    "key": "3010",
+    "name": "Victims of crime"
+   },
+   {
+    "key": "3038",
+    "name": "Vulnerable adults over 18 years"
+   },
+   {
+    "key": "3039",
+    "name": "Women"
+   },
+   {
+    "key": "3040",
+    "name": "Young people 16-25 years"
+   }
+  ]
+ },
+ "fundingType": {
+  "id": "FundingType",
+  "title": "Is there a particular type of assistance you are interested in?",
+  "description": "Tick all that apply",
+  "order": "3",
+  "response_type": "checkbox",
+  "funnels": [
+   {
+    "key": "-4000",
+    "name": "Select All"
+   },
+   {
+    "key": "4001",
+    "name": "Concession"
+   },
+   {
+    "key": "4002",
+    "name": "Direct government investment"
+   },
+   {
+    "key": "4003",
+    "name": "Frontline service procurement"
+   },
+   {
+    "key": "4004",
+    "name": "Grant"
+   },
+   {
+    "key": "4005",
+    "name": "Loan"
+   },
+   {
+    "key": "4006",
+    "name": "Non-financial support/assistance"
+   }
+  ]
+ },
+ "businessActivity": {
+  "id": "BusinessActivities",
+  "title": "Which of these business activities are you interested in?",
+  "description": "Tick all that apply",
+  "order": "5",
+  "response_type": "checkbox",
+  "funnels": [
+   {
+    "key": "-5000",
+    "name": "Select all"
+   },
+   {
+    "key": "5004",
+    "name": "Attract new talent"
+   },
+   {
+    "key": "5008",
+    "name": "Business disaster relief"
+   },
+   {
+    "key": "5007",
+    "name": "Coaching & mentoring"
+   },
+   {
+    "key": "5001",
+    "name": "Commercialise a product"
+   },
+   {
+    "key": "5009",
+    "name": "Events"
+   },
+   {
+    "key": "5011",
+    "name": "Exporting"
+   },
+   {
+    "key": "5010",
+    "name": "Grow your business"
+   },
+   {
+    "key": "5002",
+    "name": "Innovation"
+   },
+   {
+    "key": "5006",
+    "name": "Networking opportunities"
+   },
+   {
+    "key": "5003",
+    "name": "Starting a new business"
+   },
+   {
+    "key": "5005",
+    "name": "Tendering for government business"
+   }
+  ]
+ }
+}

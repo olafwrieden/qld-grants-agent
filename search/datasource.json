@@ -1,0 +1,16 @@
+{
+  "name": "${SEARCH_DATASOURCE_NAME}",
+  "description": "Normalized, deduplicated grant documents written by the sync Function.",
+  "type": "azureblob",
+  "credentials": {
+    "connectionString": "ResourceId=${STORAGE_ACCOUNT_ID};"
+  },
+  "container": {
+    "name": "${GRANTS_CONTAINER}"
+  },
+  "dataDeletionDetectionPolicy": {
+    "@odata.type": "#Microsoft.Azure.Search.SoftDeleteColumnDeletionDetectionPolicy",
+    "softDeleteColumnName": "IsDeleted",
+    "softDeleteMarkerValue": "true"
+  }
+}
