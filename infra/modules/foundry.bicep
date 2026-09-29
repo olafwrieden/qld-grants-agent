@@ -6,6 +6,11 @@ param embeddingModel object
 param chatModel object
 param searchServiceId string
 param searchEndpoint string
+param knowledgeBaseName string
+param searchApiVersion string
+param appInsightsId string
+@description('Not a secret for Entra ingestion, but required connection metadata.')
+param appInsightsConnectionString string
 
 // Microsoft Foundry resource (AIServices) with project management enabled.
 resource account 'Microsoft.CognitiveServices/accounts@2026-09-15-preview' = {
@@ -90,8 +95,48 @@ resource searchConnection 'Microsoft.CognitiveServices/accounts/projects/connect
   }
 }
 
+// RemoteTool connection used by the prompt agent's MCP tool to call the FoundryIQ knowledge base
+// (knowledge_base_retrieve) with the project's managed identity.
+resource kbMcpConnection 'Microsoft.CognitiveServices/accounts/projects/connections@2026-09-15-preview' = {
+  parent: project
+  name: '${knowledgeBaseName}-mcp'
+  dependsOn: [searchConnection]
+  properties: {
+    category: 'RemoteTool'
+    target: '${searchEndpoint}/knowledgebases/${knowledgeBaseName}/mcp?api-version=${searchApiVersion}'
+    authType: 'ProjectManagedIdentity'
+    audience: 'https://search.azure.com/'
+    isSharedToAll: true
+    metadata: {
+      ApiType: 'Azure'
+    }
+  }
+}
+
+// Agent tracing/monitoring: Foundry Agent Service sends OpenTelemetry traces to this Application Insights
+// (portal: Agents > Traces / Monitor). Keyless: ingestion uses the project managed identity, which gets
+// Monitoring Metrics Publisher on the component (roles.bicep). Only one AppInsights connection per project.
+resource appInsightsConnection 'Microsoft.CognitiveServices/accounts/projects/connections@2026-09-15-preview' = {
+  parent: project
+  name: 'appinsights'
+  dependsOn: [kbMcpConnection]
+  properties: {
+    category: 'AppInsights'
+    target: appInsightsId
+    authType: 'ProjectManagedIdentity'
+    isSharedToAll: true
+    metadata: {
+      ApiType: 'Azure'
+      ResourceId: appInsightsId
+      ApplicationInsightsConnectionString: appInsightsConnectionString
+    }
+  }
+}
+
 output accountName string = account.name
 output projectName string = project.name
+output projectEndpoint string = 'https://${account.properties.customSubDomainName}.services.ai.azure.com/api/projects/${project.name}'
+output kbMcpConnectionName string = kbMcpConnection.name
 output projectPrincipalId string = project.identity.principalId
 output openAiEndpoint string = 'https://${account.properties.customSubDomainName}.openai.azure.com'
 output embeddingDeployment string = embedding.name

@@ -1,10 +1,10 @@
 # QLD Grants Agent
 
-Queensland Government grants in **Azure AI Search (FoundryIQ)**, ready for keyword, vector, semantic and hybrid search and for **agentic retrieval**.
+Queensland Government grants in **Azure AI Search (FoundryIQ)**, ready for keyword, vector, semantic and hybrid search and for **agentic retrieval**, with a **Foundry prompt agent** that helps anyone find a grant.
 
-A weekly TypeScript Azure Function pulls the [Grants Finder](https://www.grants.services.qld.gov.au/) API. It joins the dimension tables, removes duplicates and stages one JSON document per grant in Blob Storage. An AI Search **pull indexer** then embeds the title and description with a Microsoft Foundry `text-embedding-3-small` deployment. The results go into a faceted `grants` index, which a FoundryIQ **knowledge base** (`gpt-5.4-mini`) is layered over.
+A weekly TypeScript Azure Function pulls the [Grants Finder](https://www.grants.services.qld.gov.au/) API. It joins the dimension tables, removes duplicates and stages one JSON document per grant in Blob Storage. An AI Search **pull indexer** then embeds the title and description with a Microsoft Foundry `text-embedding-3-small` deployment. The results go into a faceted `grants` index, which a FoundryIQ **knowledge base** (`gpt-5.4-mini`) is layered over. The **Queensland Grants Finder agent** (`agents/grants-agent.yaml`) calls that knowledge base through MCP.
 
-> No UI yet. The goal of this stage is to show that indexing works and to explore the index through the Search REST API (see [Querying](#querying)).
+> No UI yet. Explore the index through the Search REST API (see [Querying](#querying)) and talk to the agent from the terminal or the Foundry portal (see [Grants agent](#grants-agent)).
 
 ---
 
@@ -35,6 +35,7 @@ flowchart LR
     subgraph AIF["Microsoft Foundry"]
         E[text-embedding-3-small]
         C[gpt-5.4-mini]
+        AG[🤖 qld-grants-agent<br/>prompt agent]
     end
 
     S & D --> T --> N --> X -->|write only if changed<br/>soft-delete if removed| B
@@ -44,6 +45,9 @@ flowchart LR
     IDX --> KS
     KB -. query planning / answers .-> C
     IDX -. query-time vectorizer .-> E
+    AG -->|MCP knowledge_base_retrieve| KB
+    AG -. reasoning .-> C
+    AG -. OpenTelemetry traces .-> AI[(App Insights)]
 ```
 
 **Why stage in Blob?** AI Search pull indexers can't call an HTTP endpoint or Function directly. Blob is the simplest supported source. It gives change detection (`LastModified`), soft-delete detection (`IsDeleted` metadata) and a free audit trail of exactly what was indexed.
@@ -51,10 +55,10 @@ flowchart LR
 | Resource | Notes |
 |---|---|
 | **Azure AI Search** `serverless` (preview), `2026-09-01-preview` | Semantic ranker and agentic retrieval (`knowledgeRetrieval`) enabled, system-assigned MI, Entra ID + key auth |
-| **Microsoft Foundry** (AIServices) + project, `2026-09-15-preview` | `text-embedding-3-small` (1536d) and `gpt-5.4-mini` GlobalStandard deployments; project connection to Search |
+| **Microsoft Foundry** (AIServices) + project, `2026-09-15-preview` | `text-embedding-3-small` (1536d) and `gpt-5.4-mini` GlobalStandard deployments; project connections to Search (`grants-search`), the knowledge base MCP endpoint (`grants-kb-mcp`, `RemoteTool`, project managed identity) and Application Insights (`appinsights`, agent tracing) |
 | **Function App** Flex Consumption, `2026-08-01` | Node 22, system MI, identity-based `AzureWebJobsStorage` |
 | **Storage** `2026-09-01` | Shared keys disabled. Containers: `grants` and `app-package` |
-| Log Analytics + App Insights | Function telemetry |
+| Log Analytics + App Insights | Function telemetry and Foundry agent traces |
 | RBAC `2026-07-01-preview` | Keyless everywhere (see [Security](#security)) |
 
 ---
@@ -114,7 +118,8 @@ src/
   lib/                      qldClient · normalize · dates · dedupe · transform · blobStore · searchClient · sync
 search/                 JSON definitions (templated with ${VARS}): index, datasource, skillset,
                         indexer, knowledge-source, knowledge-base
-scripts/                setup-search.ts · query.ts · preview-grants.ts · env.ts
+agents/                 Foundry agent definitions (YAML, templated with ${VARS}): grants-agent.yaml
+scripts/                setup-search.ts · setup-agent.ts · chat.ts · query.ts · preview-grants.ts · env.ts · foundry.ts
 test/                   vitest unit tests + small real-data fixtures
 ```
 
@@ -154,6 +159,10 @@ Invoke-RestMethod -Method Post "https://$app.azurewebsites.net/api/sync?code=$ke
 
 # 5. Watch the indexer, then query
 npm run query -- status
+
+# 6. Grants agent (Foundry prompt agent from agents/*.yaml), then chat with it
+npm run setup:agent
+npm run chat
 ```
 
 > Bicep may warn `BCP081 … does not have types available` for the newest API versions (Bicep's type definitions lag behind ARM). ARM still validates these at deploy time. `az deployment group validate` passes with this template.
@@ -239,7 +248,75 @@ POST https://<search>.search.windows.net/knowledgebases/grants-kb/retrieve?api-v
 { "messages": [{ "role": "user", "content": [{ "type": "text", "text": "Which open grants support First Nations community groups?" }] }] }
 ```
 
-The knowledge base (`grants-kb`) is also available to Foundry agents through the project's `grants-search` connection.
+The knowledge base (`grants-kb`) is also exposed as an MCP server at `/knowledgebases/grants-kb/mcp`, which the grants agent uses.
+
+---
+
+## Grants agent
+
+`agents/grants-agent.yaml` defines **`qld-grants-agent`**, a Foundry Agent Service **prompt agent** on `gpt-5.4-mini`. In the Foundry portal it appears as **Queensland Grants Finder** (`metadata.welcomeMessage`). The playground shows three starter prompts (`metadata.starterPrompts`, newline-separated), each covering a different kind of search:
+
+| Starter prompt | What it shows |
+|---|---|
+| *I run a small cafe in Townsville and want to take on an apprentice. What support can I get?* | Business applicant + employment topic, where the agent narrows by fit |
+| *Which grants for community sports clubs are open right now, and when do they close?* | Community group, open-only, closing dates |
+| *Are there any rebates or concessions to help my family with energy bills?* | Individual/household, concessions and rebates rather than grants |
+
+Its instructions tell it to:
+
+- always ground answers in the knowledge base, and never invent programs, amounts, dates or links;
+- work out who is applying (individual, business, community group, council or researcher) and what they need, asking at most one clarifying question;
+- prefer open grants and rank by fit, then by how soon they close;
+- present each grant with its status, closing date, amount, agency, who can apply, a plain-English description and the official link, plus citations;
+- stay in scope and never ask for personal information.
+
+```yaml
+name: qld-grants-agent
+description: Helps anyone ... find Queensland Government grants and assistance ...
+metadata:
+  welcomeMessage: Queensland Grants Finder      # display name in the Foundry portal
+  starterPrompts: |-                            # one prompt per line
+    I run a small cafe in Townsville and want to take on an apprentice. What support can I get?
+    ...
+definition:
+  kind: prompt
+  model: ${CHAT_DEPLOYMENT}
+  instructions: |
+    You are the Queensland Grants Finder ...
+  tools:
+    - type: mcp
+      server_label: qld_grants_kb
+      server_url: ${SEARCH_ENDPOINT}/knowledgebases/${KNOWLEDGE_BASE_NAME}/mcp?api-version=2026-08-01-preview
+      project_connection_id: ${KB_MCP_CONNECTION_NAME}
+      require_approval: never
+      allowed_tools: [knowledge_base_retrieve]
+```
+
+**How it's wired (all as code):**
+
+1. **Bicep** creates the project connection `grants-kb-mcp`: category `RemoteTool`, auth `ProjectManagedIdentity`, audience `https://search.azure.com/`, target = the knowledge base MCP endpoint. It also grants the project identity **Search Index Data Reader**.
+2. **`npm run setup:agent`** renders every `agents/*.yaml` with the deployment outputs in `.env`. It then publishes a new agent version via `POST {project}/agents/{name}/versions?api-version=v1`. The `definition` block maps 1:1 to the REST body, so fields such as `temperature` or `structured_inputs` can be added in YAML. Re-running it publishes a new version.
+3. **`npm run chat`** starts a conversation through the project's OpenAI-compatible Responses API (`agent_reference`). It shows each `knowledge_base_retrieve` call.
+
+```powershell
+npm run chat                                                        # interactive, multi-turn
+npm run chat -- "I run a small cafe in Townsville and want to hire an apprentice. Any funding?"
+npm run chat -- --debug "grants for a community sports club"        # include the raw tool calls/output
+```
+
+The agent also appears in the **Foundry portal** (project `proj-qldgrants` → Agents), where you can use the playground, view traces and publish it to channels such as Teams or Microsoft 365 Copilot.
+
+### Monitoring
+
+Bicep connects the project to the same **Application Insights** resource the Function uses, through a project connection `appinsights` (category `AppInsights`). Foundry Agent Service then emits OpenTelemetry GenAI traces for every agent run (`invoke_agent`), model call (`chat gpt-5.4-mini`) and knowledge base call (`execute_tool mcp_qld_grants_kb.knowledge_base_retrieve`). The traces cover latency, token usage, errors and message content. View them under **Agents → Traces / Monitor** in the portal, or query them directly:
+
+```kusto
+dependencies
+| where cloud_RoleName == "responsesapi"
+| summarize runs = countif(name startswith "invoke_agent"), p95ms = percentile(duration, 95) by bin(timestamp, 1h)
+```
+
+Ingestion is keyless: the connection uses `ProjectManagedIdentity`, and the project identity has **Monitoring Metrics Publisher** on the component. The project identity also has **Log Analytics Reader** and **Privileged Monitoring Data Reader** so evaluations can read traces back. The deploying user gets the two reader roles to view traces, including GenAI message content. Only one App Insights connection is allowed per project.
 
 ---
 
@@ -248,8 +325,9 @@ The knowledge base (`grants-kb`) is also available to Foundry agents through the
 - **Keyless by default.** Every hop uses managed identity and Entra ID RBAC:
   - Function → Storage (Blob Data Owner) and Search (Service Contributor, to run the indexer)
   - Search → Storage (Blob Data Reader) and Foundry (Cognitive Services OpenAI User)
-  - Foundry project → Search (Index Data Reader + Service Contributor)
-  - The deploying user (optional `principalId`) gets the data-plane roles needed by the scripts.
+  - Foundry project → Search (Index Data Reader + Service Contributor), used by the agent's MCP connection
+  - Foundry project → App Insights (Monitoring Metrics Publisher for keyless trace ingestion, plus Log Analytics Reader and Privileged Monitoring Data Reader)
+  - The deploying user (optional `principalId`) gets the data-plane roles needed by the scripts, including Azure AI User to publish and run agents.
 - Storage has shared-key access disabled, and Foundry has local (key) auth disabled.
 - The QLD API key is passed as a `@secure()` Bicep parameter into a Function app setting. It is never committed. `.env` and `local.settings.json` are git-ignored.
 
@@ -265,5 +343,5 @@ The knowledge base (`grants-kb`) is also available to Foundry agents through the
 ## Next steps
 
 - Tune relevance: add scoring profiles (e.g. boost closing-soon grants), synonym maps for agency acronyms, and query rewrite.
-- Add evaluation queries with expected results.
-- Build an agent or UI on top of `grants-kb`.
+- Add evaluation queries with expected results (for both the index and the agent), e.g. with Foundry evaluations.
+- Put a UI on the agent, or publish it to Teams / Microsoft 365 Copilot from the Foundry portal.

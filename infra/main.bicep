@@ -67,6 +67,8 @@ var names = {
 var grantsContainer = 'grants'
 var deploymentContainer = 'app-package'
 var indexerName = 'grants-indexer'
+var knowledgeBaseName = 'grants-kb'
+var searchDataApiVersion = '2026-08-01-preview'
 
 module monitoring 'modules/monitoring.bicep' = {
   name: 'monitoring'
@@ -110,6 +112,10 @@ module foundry 'modules/foundry.bicep' = {
     chatModel: chatModel
     searchServiceId: search.outputs.id
     searchEndpoint: search.outputs.endpoint
+    knowledgeBaseName: knowledgeBaseName
+    searchApiVersion: searchDataApiVersion
+    appInsightsId: monitoring.outputs.appInsightsId
+    appInsightsConnectionString: monitoring.outputs.appInsightsConnectionString
   }
 }
 
@@ -141,6 +147,7 @@ module roles 'modules/roles.bicep' = {
     storageAccountName: storage.outputs.name
     searchServiceName: search.outputs.name
     foundryAccountName: foundry.outputs.accountName
+    appInsightsName: monitoring.outputs.appInsightsName
     functionPrincipalId: functionApp.outputs.principalId
     searchPrincipalId: search.outputs.principalId
     projectPrincipalId: foundry.outputs.projectPrincipalId
@@ -160,6 +167,9 @@ output GRANTS_CONTAINER string = grantsContainer
 output SEARCH_INDEXER_NAME string = indexerName
 output FOUNDRY_ACCOUNT_NAME string = foundry.outputs.accountName
 output FOUNDRY_PROJECT_NAME string = foundry.outputs.projectName
+output FOUNDRY_PROJECT_ENDPOINT string = foundry.outputs.projectEndpoint
+output KNOWLEDGE_BASE_NAME string = knowledgeBaseName
+output KB_MCP_CONNECTION_NAME string = foundry.outputs.kbMcpConnectionName
 output FOUNDRY_OPENAI_ENDPOINT string = foundry.outputs.openAiEndpoint
 output EMBEDDING_DEPLOYMENT string = foundry.outputs.embeddingDeployment
 output EMBEDDING_MODEL string = embeddingModel.name
