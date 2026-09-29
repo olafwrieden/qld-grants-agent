@@ -121,6 +121,8 @@ search/                 JSON definitions (templated with ${VARS}): index, dataso
 agents/                 Foundry agent definitions (YAML, templated with ${VARS}): grants-agent.yaml
 scripts/                setup-search.ts · setup-agent.ts · chat.ts · query.ts · preview-grants.ts · env.ts · foundry.ts
 test/                   vitest unit tests + small real-data fixtures
+demo/                   throwaway demos, self-contained and not deployed
+  grants-finder-extension/  Edge/Chrome extension: AI companion on the public Grants Finder (see its JOURNEY.md)
 ```
 
 ---
@@ -344,4 +346,4 @@ Ingestion is keyless: the connection uses `ProjectManagedIdentity`, and the proj
 
 - Tune relevance: add scoring profiles (e.g. boost closing-soon grants), synonym maps for agency acronyms, and query rewrite.
 - Add evaluation queries with expected results (for both the index and the agent), e.g. with Foundry evaluations.
-- Put a UI on the agent, or publish it to Teams / Microsoft 365 Copilot from the Foundry portal.
+- Put a UI on the agent, or publish it to Teams / Microsoft 365 Copilot from the Foundry portal. For an art-of-the-possible preview, see the [Grants Finder AI Companion demo](demo/grants-finder-extension/JOURNEY.md), a browser extension that overlays the agent on the public site.
