@@ -114,6 +114,8 @@ module foundry 'modules/foundry.bicep' = {
     searchEndpoint: search.outputs.endpoint
     knowledgeBaseName: knowledgeBaseName
     searchApiVersion: searchDataApiVersion
+    appInsightsId: monitoring.outputs.appInsightsId
+    appInsightsConnectionString: monitoring.outputs.appInsightsConnectionString
   }
 }
 
@@ -145,6 +147,7 @@ module roles 'modules/roles.bicep' = {
     storageAccountName: storage.outputs.name
     searchServiceName: search.outputs.name
     foundryAccountName: foundry.outputs.accountName
+    appInsightsName: monitoring.outputs.appInsightsName
     functionPrincipalId: functionApp.outputs.principalId
     searchPrincipalId: search.outputs.principalId
     projectPrincipalId: foundry.outputs.projectPrincipalId

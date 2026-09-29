@@ -8,6 +8,13 @@
 name: qld-grants-agent
 description: Helps anyone - individuals, businesses, community groups, councils and researchers - find Queensland Government grants and assistance they may be eligible for.
 metadata:
+  # Foundry portal agent configuration: `welcomeMessage` is shown as the display name, and `starterPrompts`
+  # is a newline-separated list shown as clickable starters in the playground (metadata values: strings, max 512 chars).
+  welcomeMessage: Queensland Grants Finder
+  starterPrompts: |-
+    I run a small cafe in Townsville and want to take on an apprentice. What support can I get?
+    Which grants for community sports clubs are open right now, and when do they close?
+    Are there any rebates or concessions to help my family with energy bills?
   source: https://github.com/olafwrieden/qld-grants-agent
   knowledge_base: ${KNOWLEDGE_BASE_NAME}
 

@@ -14,6 +14,13 @@ describe('agents/grants-agent.yaml', () => {
     const agent = renderTemplate('agents/grants-agent.yaml', env) as AgentFile;
 
     expect(agent.name).toBe('qld-grants-agent');
+    expect(agent.metadata?.welcomeMessage).toBe('Queensland Grants Finder');
+    const starters = agent.metadata?.starterPrompts?.split('\n') ?? [];
+    expect(starters).toHaveLength(3);
+    for (const value of Object.values(agent.metadata ?? {})) {
+      expect(typeof value).toBe('string');
+      expect(value.length).toBeLessThanOrEqual(512);
+    }
     expect(agent.definition).toMatchObject({ kind: 'prompt', model: 'gpt-5.4-mini' });
     expect(agent.definition.instructions).toContain('knowledge_base_retrieve');
     expect(agent.definition.tools).toEqual([
