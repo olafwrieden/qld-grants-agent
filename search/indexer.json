@@ -1,11 +1,11 @@
 {
   "name": "${SEARCH_INDEXER_NAME}",
-  "description": "Weekly pull of grant documents from Blob Storage (also triggered by the sync Function).",
+  "description": "Pull of grant documents from Blob Storage: daily safety net (only changed blobs are processed) plus on demand from the weekly sync Function.",
   "dataSourceName": "${SEARCH_DATASOURCE_NAME}",
   "targetIndexName": "${SEARCH_INDEX_NAME}",
   "skillsetName": "${SEARCH_SKILLSET_NAME}",
   "schedule": {
-    "interval": "P7D",
+    "interval": "P1D",
     "startTime": "2026-01-03T17:00:00Z"
   },
   "parameters": {

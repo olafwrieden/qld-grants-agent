@@ -26,7 +26,7 @@ flowchart LR
     B[(Blob Storage<br/>grants/&lt;id&gt;.json)]
 
     subgraph SRCH["Azure AI Search · Serverless"]
-        I[Blob indexer<br/>weekly + on demand]
+        I[Blob indexer<br/>on demand + daily safety net]
         K[Skillset<br/>2× AzureOpenAIEmbedding]
         IDX[(grants index<br/>BM25 + HNSW + semantic)]
         KS[Knowledge source] --> KB[Knowledge base]
@@ -100,7 +100,7 @@ S = searchable, F = filterable, Fa = facetable, So = sortable. The semantic conf
 2. **Identical content → one document.** Each normalized record gets a SHA-256 fingerprint that excludes its id. Records with the same fingerprint are merged into the lowest id, and every original id goes into `sourceIds`. In the live feed, for example, 5 identical *Australian Teletrial Program* records become 1.
 3. **Only write what changed.** Each blob stores a `contenthash` in its metadata. The sync lists the container once, rewrites only the grants whose hash changed, and leaves everything else alone. The indexer's change detection therefore re-embeds only changed grants, which keeps embedding cost close to zero on quiet weeks.
 4. **Removals.** A grant that disappears (or is merged into another id) gets blob metadata `IsDeleted=true`, and the indexer's soft-delete policy removes it from the index. Soft-deleted blobs are purged after 30 days (`SOFT_DELETE_RETENTION_DAYS`).
-5. The Function triggers the indexer only when something changed. The indexer also has its own weekly schedule as a safety net.
+5. The Function triggers the indexer only when something changed. The indexer also has its own daily schedule as a safety net.
 
 ---
 
@@ -130,22 +130,25 @@ The region must support the **Serverless** tier, **semantic ranker** and **agent
 az login
 $env:QLD_API_KEY        = '<your X-Api-Key>'
 $env:AZURE_PRINCIPAL_ID = az ad signed-in-user show --query id -o tsv   # grants you data-plane roles for the scripts
+# $env:STORAGE_POLICY_OPT_OUT = 'true'   # only if an org policy forces storage public network access off (adds tag SecurityControl=Ignore)
 
 # 1. Infrastructure
 az group create -n rg-qld-grants -l australiaeast
 az deployment group create -g rg-qld-grants -n main -p infra/main.bicepparam
 
-# 2. Function code
+# 2. Function code (ARM returns output names with odd casing, hence functioN_APP_NAME)
 npm ci
 npm run build
-func azure functionapp publish (az deployment group show -g rg-qld-grants -n main --query properties.outputs.FUNCTION_APP_NAME.value -o tsv)
+$app = az deployment group show -g rg-qld-grants -n main --query properties.outputs.functioN_APP_NAME.value -o tsv
+func azure functionapp publish $app
 
 # 3. Search objects (index, data source, skillset, indexer, knowledge source, knowledge base)
-#    -g pulls the deployment outputs into .env for all later script runs
-npm run setup:search -- -g rg-qld-grants
+#    AZURE_RESOURCE_GROUP pulls the deployment outputs into .env for all later script runs
+#    (or: npx tsx scripts/setup-search.ts -g rg-qld-grants to force a refresh)
+$env:AZURE_RESOURCE_GROUP = 'rg-qld-grants'
+npm run setup:search
 
 # 4. First sync (or wait for the weekly timer)
-$app = (Get-Content .env | Select-String '^FUNCTION_APP_NAME=').Line.Split('=')[1]
 $key = az functionapp function keys list -g rg-qld-grants -n $app --function-name syncGrants --query default -o tsv
 Invoke-RestMethod -Method Post "https://$app.azurewebsites.net/api/sync?code=$key"
 
@@ -166,7 +169,7 @@ npm run query -- status
 | `SEARCH_ENDPOINT` / `SEARCH_INDEXER_NAME` | deployment output / `grants-indexer` | indexer run after sync |
 | `SOFT_DELETE_RETENTION_DAYS` | `30` | purge soft-deleted blobs after N days |
 
-The indexer's own schedule (`search/indexer.json`) is `P7D`, starting Saturday 17:00 UTC, one hour after the Function.
+The indexer's own schedule (`search/indexer.json`) is `P1D`, the longest interval AI Search allows. Blob change detection means runs with no changed blobs process nothing, so the effective cadence is the weekly Function, which triggers the indexer as soon as it writes changes.
 
 ---
 

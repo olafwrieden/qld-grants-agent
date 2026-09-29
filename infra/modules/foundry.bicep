@@ -38,6 +38,7 @@ resource project 'Microsoft.CognitiveServices/accounts/projects@2026-09-15-previ
 resource embedding 'Microsoft.CognitiveServices/accounts/deployments@2026-09-15-preview' = {
   parent: account
   name: embeddingModel.name
+  dependsOn: [project]
   sku: {
     name: embeddingModel.sku
     capacity: embeddingModel.capacity
@@ -52,7 +53,7 @@ resource embedding 'Microsoft.CognitiveServices/accounts/deployments@2026-09-15-
   }
 }
 
-// Deployments on the same account must be created sequentially.
+// Child writes on the same account (project, deployments) must be sequential.
 resource chat 'Microsoft.CognitiveServices/accounts/deployments@2026-09-15-preview' = {
   parent: account
   name: chatModel.name
@@ -75,6 +76,7 @@ resource chat 'Microsoft.CognitiveServices/accounts/deployments@2026-09-15-previ
 resource searchConnection 'Microsoft.CognitiveServices/accounts/projects/connections@2026-09-15-preview' = {
   parent: project
   name: 'grants-search'
+  dependsOn: [chat]
   properties: {
     category: 'CognitiveSearch'
     target: searchEndpoint

@@ -29,17 +29,22 @@ function writeEnvFromDeployment(resourceGroup: string, deploymentName: string): 
     { encoding: 'utf8', shell: process.platform === 'win32' },
   );
   const outputs = JSON.parse(json) as Record<string, { value: unknown }>;
-  const lines = Object.entries(outputs).map(([k, v]) => `${k}=${String(v.value)}`);
+  // ARM mangles output-name casing (e.g. `searcH_ENDPOINT`), so normalise back to UPPER_SNAKE_CASE.
+  const lines = Object.entries(outputs).map(([k, v]) => `${k.toUpperCase()}=${String(v.value)}`);
   writeFileSync(ENV_FILE, `${lines.join('\n')}\n`);
   console.log(`Wrote ${lines.length} settings from deployment '${deploymentName}' to .env`);
 }
 
 /**
  * Loads settings for the helper scripts. Pass `-g <resource-group>` (and optionally `--deployment <name>`)
- * to refresh `.env` from the Bicep deployment outputs first.
+ * to refresh `.env` from the Bicep deployment outputs first. `AZURE_RESOURCE_GROUP` in the shell does the same
+ * when `.env` does not exist yet (handy because npm on PowerShell swallows `-- -g`).
  */
 export function loadScriptEnv(): Record<string, string> {
-  const rg = argValue('-g') ?? argValue('--resource-group');
+  const rg =
+    argValue('-g') ??
+    argValue('--resource-group') ??
+    (!existsSync(ENV_FILE) ? process.env.AZURE_RESOURCE_GROUP : undefined);
   if (rg) writeEnvFromDeployment(rg, argValue('--deployment') ?? 'main');
   if (existsSync(ENV_FILE)) process.loadEnvFile(ENV_FILE);
 

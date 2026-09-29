@@ -50,6 +50,9 @@ param tags object = {
   project: 'qld-grants-agent'
 }
 
+@description('Extra tags for the storage account only, e.g. { SecurityControl: \'Ignore\' } where an org policy would otherwise force public network access off (the Function deployment and serverless Search indexer need it).')
+param storageExtraTags object = {}
+
 var token = toLower(uniqueString(subscription().id, resourceGroup().id, environmentName))
 var names = {
   logs: 'log-${environmentName}-${token}'
@@ -79,7 +82,7 @@ module storage 'modules/storage.bicep' = {
   name: 'storage'
   params: {
     location: location
-    tags: tags
+    tags: union(tags, storageExtraTags)
     name: names.storage
     containers: [grantsContainer, deploymentContainer]
   }
