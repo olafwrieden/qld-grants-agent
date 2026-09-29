@@ -1,0 +1,1288 @@
+{
+ "60001": {
+  "id": "60001",
+  "tags": [
+   "2008",
+   "3020",
+   "1002",
+   "4004"
+  ],
+  "business_activities": [],
+  "name": "Recreational Fishing Grant",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DPI"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "The purpose is to ensure future generations have the basic fishing gear and shown the fundamentals of how to fish, including an introduction to Queensland's fishing rules through Sunfish so as to enjoy the health and social benefits of how to enjoy the state's outdoor lifestyle."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://www.dpi.qld.gov.au/business-priorities/fisheries/recreational/community-fishing-grants"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Open"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DPI"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "60205": {
+  "id": "60205",
+  "tags": [
+   "2001",
+   "2009",
+   "2011",
+   "3026",
+   "1004",
+   "1003",
+   "4004"
+  ],
+  "business_activities": [],
+  "name": "Social Reinvestment",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DWATSIPM"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Social reinvestment funding supports community-led actions in partnership with government that improve wellbeing and generate savings through less demand on government-funded services."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Proposed projects must be community-led and improve wellbeing of community members or improve community social or economic outcomes which in turn will reduce future demand for government services in the community lowering service delivery costs. The proposal must identify the savings that would be re-invested in the community."
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://www.datsip.qld.gov.au"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DWATSIPM"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "60603": {
+  "id": "60603",
+  "tags": [
+   "2011",
+   "2004",
+   "2017",
+   "3029",
+   "1003",
+   "4003"
+  ],
+  "business_activities": [],
+  "name": "Families",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Child and Family Services"
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DFSDSCS"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "To provide family support services to work with vulnerable families to help improve parenting skills and give parents the support they need to prevent problems from escalating to crisis point."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://www.cyjma.qld.gov.au/"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DFSDSCS"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Frontline service procurement"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "60604": {
+  "id": "60604",
+  "tags": [
+   "2011",
+   "2004",
+   "2017",
+   "3029",
+   "1003",
+   "4004"
+  ],
+  "business_activities": [],
+  "name": "Families",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Child and Family Services"
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DFSDSCS"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "To provide family support services to work with vulnerable families to help improve parenting skills and give parents the support they need to prevent problems from escalating to crisis point."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://www.cyjma.qld.gov.au/"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DFSDSCS"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "60847": {
+  "id": "60847",
+  "tags": [
+   "2003",
+   "2007",
+   "3025",
+   "3013",
+   "3026",
+   "1002",
+   "1003",
+   "1005",
+   "4004",
+   "5002",
+   "5009"
+  ],
+  "business_activities": [],
+  "name": "Round 1",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Innovation Events Fund"
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DETSI"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Supporting Queensland innovation driven organisations to deliver events that showcase, test or explore new and emerging innovations."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "See full eligibility in the program guidelines. Applicants are limited to one application per funding round."
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://advance.qld.gov.au/grants-and-programs/innovation-events-fund"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "13/02/2026"
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "16/03/2026"
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DETSI"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "25000"
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "All applicants will be notified via email of the outcome of their application."
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "61807": {
+  "id": "61807",
+  "tags": [
+   "2007",
+   "2003",
+   "3013",
+   "1002",
+   "4004",
+   "5010",
+   "5002"
+  ],
+  "business_activities": [],
+  "name": "Round 1",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Transforming Queensland Manufacturing Grants Program"
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DNRMMRRD"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "The new Transforming Queensland Manufacturing Grants Program (TQMGP) is helping shape the future of Queensland’s manufacturing sector. Through this program, the Queensland Government is investing in innovation, advanced technology, and job creation to strengthen the state’s economy and position Queensland as a leader in modern manufacturing.\nRound one has $12.5 million available, with eligible businesses able to apply for up to $1.5 million in matched grants.\nApplications for Round 1 close on Thursday 16 April 2026 at 1pm."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Eligible businesses are Queensland-based manufacturers, registered for GST, holding an active Australian Business Number, employing between 5 and 200 employees and able to contribute at least 50% of the eligible project costs. Full eligibility requirements are available in the Applicant Guidelines."
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://www.business.qld.gov.au/industries/manufacturing-retail/manufacturing/grant-programs/transforming"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "5-Feb-26"
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "16-Apr-26"
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "DNRMMRRD"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "1500000"
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Applications for the TQMGP will proceed through a single-stage competitive application process as outlined in the Applicant Guidelines."
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "64311": {
+  "id": "64311",
+  "tags": [
+   "2009",
+   "3009",
+   "1006",
+   "4004"
+  ],
+  "business_activities": [],
+  "name": "The Australian Teletrial Program",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "QH"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Increase access of rural, regional and remote (RRR) patients to clinical trials closer to their homes by national scaling of the Australasian Teletrial Model (ATM)."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://australianteletrialprogram.gov.au/"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "QH"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "64310": {
+  "id": "64310",
+  "tags": [
+   "2009",
+   "3009",
+   "1006",
+   "4004"
+  ],
+  "business_activities": [],
+  "name": "The Australian Teletrial Program",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "QH"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Increase access of rural, regional and remote (RRR) patients to clinical trials closer to their homes by national scaling of the Australasian Teletrial Model (ATM)."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://australianteletrialprogram.gov.au/"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "QH"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ },
+ "64312": {
+  "id": "64312",
+  "tags": [
+   "2009",
+   "3009",
+   "1006",
+   "4004"
+  ],
+  "business_activities": [],
+  "name": "The Australian Teletrial Program",
+  "parent_answer_ids": [],
+  "location": "",
+  "details": {
+   "sub_program_title": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Sub-program title"
+   },
+   "delivered_by": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "QH"
+     }
+    ],
+    "title": "Delivered by"
+   },
+   "grant_summary": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Increase access of rural, regional and remote (RRR) patients to clinical trials closer to their homes by national scaling of the Australasian Teletrial Model (ATM)."
+     }
+    ],
+    "title": "Summary"
+   },
+   "what_are_the_eligibility_criteria?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "What are the eligibility criteria?"
+   },
+   "url_link": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "https://australianteletrialprogram.gov.au/"
+     }
+    ],
+    "title": "URL Link"
+   },
+   "how_can_I_apply_or_get_more_information?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How can I apply or get more information?"
+   },
+   "status": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Closed"
+     }
+    ],
+    "title": "Status"
+   },
+   "opening_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Opening Date (Date Format)"
+   },
+   "closing_date_(date_format)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Closing Date (Date Format)"
+   },
+   "issuing_agency": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "QH"
+     }
+    ],
+    "title": "Issuing Agency"
+   },
+   "amount_(currency)": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Amount (currency)"
+   },
+   "how_will_i_know_if_i'm_successful?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "How will I know if I'm successful?"
+   },
+   "financial_year_budget": {
+    "sections": [
+     {
+      "type": "text",
+      "data": ""
+     }
+    ],
+    "title": "Financial year budget"
+   },
+   "grant_or_assistance?": {
+    "sections": [
+     {
+      "type": "text",
+      "data": "Grant"
+     }
+    ],
+    "title": "Grant or assistance?"
+   }
+  }
+ }
+}

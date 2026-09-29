@@ -1,0 +1,11 @@
+node_modules/
+dist/
+local.settings.json
+.env
+*.log
+.azure/
+infra/main.json
+.vscode/
+bin/
+obj/
+.python_packages/

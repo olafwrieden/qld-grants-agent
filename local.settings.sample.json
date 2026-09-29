@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "QLD_API_BASE_URL": "https://api.jus-checklist.services.qld.gov.au/v1/api/legacy/resources/grants",
+    "QLD_API_KEY": "<your-x-api-key>",
+    "GRANTS_STORAGE_ACCOUNT_URL": "https://<storage-account>.blob.core.windows.net",
+    "GRANTS_CONTAINER": "grants",
+    "SEARCH_ENDPOINT": "https://<search-service>.search.windows.net",
+    "SEARCH_INDEXER_NAME": "grants-indexer",
+    "SYNC_SCHEDULE": "0 0 16 * * 6"
+  }
+}

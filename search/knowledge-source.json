@@ -1,0 +1,25 @@
+{
+  "name": "${KNOWLEDGE_SOURCE_NAME}",
+  "kind": "searchIndex",
+  "description": "Queensland Government grants and assistance programs, with eligibility, dates, amounts and audience facets.",
+  "searchIndexParameters": {
+    "searchIndexName": "${SEARCH_INDEX_NAME}",
+    "semanticConfigurationName": "grants-semantic",
+    "sourceDataFields": [
+      { "name": "id" },
+      { "name": "title" },
+      { "name": "summary" },
+      { "name": "eligibility" },
+      { "name": "status" },
+      { "name": "isOpen" },
+      { "name": "openingDate" },
+      { "name": "closingDate" },
+      { "name": "amount" },
+      { "name": "issuingAgency" },
+      { "name": "assistanceType" },
+      { "name": "categories" },
+      { "name": "applicantTypes" },
+      { "name": "url" }
+    ]
+  }
+}
