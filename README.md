@@ -1,8 +1,8 @@
-# QLD Grants Agent
+# Grants Agent (Queensland by default)
 
-Queensland Government grants in **Azure AI Search (FoundryIQ)**, ready for keyword, vector, semantic and hybrid search and for **agentic retrieval**, with a **Foundry prompt agent** that helps anyone find a grant.
+Queensland Grants Finder and [business.gov.au Grants and programs](https://business.gov.au/Grants-and-Programs) listings in **Azure AI Search (FoundryIQ)**, ready for keyword, vector, semantic, hybrid and **agentic retrieval**. The Foundry prompt agent defaults to grants available in Queensland.
 
-A weekly TypeScript Azure Function pulls the [Grants Finder](https://www.grants.services.qld.gov.au/) API. It joins the dimension tables, removes duplicates and stages one JSON document per grant in Blob Storage. An AI Search **pull indexer** then embeds the title and description with a Microsoft Foundry `text-embedding-3-small` deployment. The results go into a faceted `grants` index, which a FoundryIQ **knowledge base** (`gpt-5.4-mini`) is layered over. The **Queensland Grants Finder agent** (`agents/grants-agent.yaml`) calls that knowledge base through MCP.
+A weekly TypeScript Azure Function pulls the [QLD Grants Finder](https://www.grants.services.qld.gov.au/) API **and** the public business.gov.au finder (Coveo). It normalizes and deduplicates each feed, then stages one JSON document per program in Blob Storage. An AI Search **pull indexer** embeds the title and description with a Microsoft Foundry `text-embedding-3-small` deployment. The results go into a faceted `grants` index, which a FoundryIQ **knowledge base** (`gpt-5.4-mini`) is layered over. The **Queensland Grants Finder agent** (`agents/grants-agent.yaml`) calls that knowledge base through MCP.
 
 > No UI yet. Explore the index through the Search REST API (see [Querying](#querying)) and talk to the agent from the terminal or the Foundry portal (see [Grants agent](#grants-agent)).
 
@@ -16,6 +16,7 @@ flowchart LR
         S[services.json<br/><i>fact</i>]
         D[application_type · category ·<br/>client_group_1 · funding_type ·<br/>business_activities<br/><i>dimensions</i>]
     end
+    BGA[business.gov.au<br/>public Coveo finder]
 
     subgraph FN["Azure Function (Flex Consumption, Node 22)"]
         T[⏰ weekly timer<br/>+ POST /api/sync]
@@ -38,7 +39,7 @@ flowchart LR
         AG[🤖 qld-grants-agent<br/>prompt agent]
     end
 
-    S & D --> T --> N --> X -->|write only if changed<br/>soft-delete if removed| B
+    S & D & BGA --> T --> N --> X -->|write only if changed<br/>soft-delete if removed| B
     X -. run indexer .-> I
     B --> I --> K --> IDX
     K -. embed .-> E
@@ -77,11 +78,14 @@ The API returns a fact table (`services.json`, about 580 records keyed by id) pl
 
 Lookups use the dimension tables, so new dimension values are picked up automatically. "Select all" options (negative keys) are ignored.
 
+**business.gov.au** uses a public Coveo search endpoint. The sync reads the finder page's published search key and query scope at run time; neither is stored or committed. It pages through all listing results and rejects incomplete snapshots before touching Blob Storage. This feed includes nationwide **and** state-specific programs; hosting on business.gov.au does not prove federal administration. The index retains each program's `jurisdictions` (the upstream `cloc` location facet) and `source` so a Queensland default can coexist with explicit other-state searches. Eligibility HTML is normalized to plain text, URLs use the public `/grants-and-programs/...` route, and date-only closing dates are treated as the *end* of the displayed Australian day. Agency and dollar amount are null when the feed doesn't provide structured values. Live counts change with the publisher's data.
+
 ### Index `grants`
 
 | Field | Type | S | F | Fa | So | Source / notes |
 |---|---|:-:|:-:|:-:|:-:|---|
 | `id` | key | | ✓ | | | upstream id (lowest id when duplicates are merged) |
+| `source`, `jurisdictions` | string, string[] | ✓ | ✓ | ✓ | | provenance and geographic applicability; business.gov.au IDs are prefixed `bga-` |
 | `title` | string | ✓ | | | ✓ | `"{sub_program_title} – {name}"`, because many records are named only "Round 1" |
 | `programName`, `roundName` | string | ✓ | ✓ | ✓ | ✓ | |
 | `summary` | string | ✓ | | | | `grant_summary` (the "description") |
@@ -100,8 +104,8 @@ S = searchable, F = filterable, Fa = facetable, So = sortable. The semantic conf
 
 ### Deduplication and updates
 
-1. **Key = upstream id.** A grant that changes upstream keeps its id, so the index document is **updated in place**.
-2. **Identical content → one document.** Each normalized record gets a SHA-256 fingerprint that excludes its id. Records with the same fingerprint are merged into the lowest id, and every original id goes into `sourceIds`. In the live feed, for example, 5 identical *Australian Teletrial Program* records become 1.
+1. **Key = source-scoped upstream id.** A QLD grant retains its numeric id (also used in the public QLD site's details route). A business.gov.au listing gets `bga-<Sitecore id>`, preventing collisions and preserving updates.
+2. **Identical QLD content → one document.** Each normalized QLD record gets a SHA-256 fingerprint that excludes its id. Records with the same fingerprint are merged into the lowest id, and every original id goes into `sourceIds`. Business.gov.au listings are deduplicated by their stable Sitecore id, keeping the richer record when duplicate variants occur. Separate publishers' listings are not merged by title, since rounds and eligibility can differ.
 3. **Only write what changed.** Each blob stores a `contenthash` in its metadata. The sync lists the container once, rewrites only the grants whose hash changed, and leaves everything else alone. The indexer's change detection therefore re-embeds only changed grants, which keeps embedding cost close to zero on quiet weeks.
 4. **Removals.** A grant that disappears (or is merged into another id) gets blob metadata `IsDeleted=true`, and the indexer's soft-delete policy removes it from the index. Soft-deleted blobs are purged after 30 days (`SOFT_DELETE_RETENTION_DAYS`).
 5. The Function triggers the indexer only when something changed. The indexer also has its own daily schedule as a safety net.
@@ -115,7 +119,7 @@ infra/                  Bicep: main.bicep (+ .bicepparam) and small modules
   modules/              search · foundry · function · storage · monitoring · roles
 src/
   functions/syncGrants.ts   weekly timer + POST /api/sync
-  lib/                      qldClient · normalize · dates · dedupe · transform · blobStore · searchClient · sync
+  lib/                      qldClient · businessClient · businessGrants · normalize · dates · dedupe · transform · blobStore · searchClient · sync
 search/                 JSON definitions (templated with ${VARS}): index, datasource, skillset,
                         indexer, knowledge-source, knowledge-base
 agents/                 Foundry agent definitions (YAML, templated with ${VARS}): grants-agent.yaml
@@ -147,7 +151,7 @@ az deployment group create -g rg-qld-grants -n main -p infra/main.bicepparam
 npm ci
 npm run build
 $app = az deployment group show -g rg-qld-grants -n main --query properties.outputs.functioN_APP_NAME.value -o tsv
-func azure functionapp publish $app
+func azure functionapp publish $app --typescript --no-build
 
 # 3. Search objects (index, data source, skillset, indexer, knowledge source, knowledge base)
 #    AZURE_RESOURCE_GROUP pulls the deployment outputs into .env for all later script runs
@@ -211,13 +215,16 @@ npm run query -- semantic "I want to export my product overseas"   # hybrid + se
 npm run query -- facets                                           # facet overview of the whole index
 npm run query -- filtered "innovation"                            # open + business applicants + grant/loan + amount ≥ 10k
 npm run query -- agentic  "What open grants can a small business get for hiring apprentices?"
+npm run query -- facets -- --all-jurisdictions                      # opt out of the Queensland default
+# other scenarios default to jurisdictions/any(j: j eq 'Queensland')
 # add --raw for the full JSON response
 ```
 
 **Open grants.** `isOpen` is exact at sync time. For an always-current view, filter at query time:
 
 ```
-status eq 'Open' and (closingDate eq null or closingDate ge 2026-09-29T00:00:00Z)
+status eq 'Open' and (closingDate eq null or closingDate ge <current-UTC-time>)
+  and jurisdictions/any(j: j eq 'Queensland')
 ```
 
 **Raw REST example** (hybrid + semantic + facets):
@@ -234,9 +241,9 @@ Content-Type: application/json
   "semanticConfiguration": "grants-semantic",
   "captions": "extractive",
   "answers": "extractive|count-3",
-  "filter": "isOpen eq true and categories/any(c: c eq 'Business and industry')",
-  "facets": ["categories,count:20", "applicantTypes", "assistanceType", "amount,values:10000|50000|100000|500000", "closingDate,interval:month"],
-  "select": "id,title,status,closingDate,amount,issuingAgency,url",
+  "filter": "status eq 'Open' and jurisdictions/any(j: j eq 'Queensland')",
+  "facets": ["source", "jurisdictions", "categories,count:20", "applicantTypes", "assistanceType"],
+  "select": "id,title,source,jurisdictions,status,closingDate,amount,issuingAgency,url",
   "top": 10,
   "count": true
 }
@@ -250,7 +257,7 @@ POST https://<search>.search.windows.net/knowledgebases/grants-kb/retrieve?api-v
 { "messages": [{ "role": "user", "content": [{ "type": "text", "text": "Which open grants support First Nations community groups?" }] }] }
 ```
 
-The knowledge base (`grants-kb`) is also exposed as an MCP server at `/knowledgebases/grants-kb/mcp`, which the grants agent uses.
+The knowledge base (`grants-kb`) is also exposed as an MCP server at `/knowledgebases/grants-kb/mcp`, which the grants agent uses. The script's agentic scenario passes `filterAddOn` for a deterministic Queensland scope; the Foundry agent itself uses a Queensland-default instruction and checks the retrieved `jurisdictions` before recommending programs. Its MCP query scoping is instruction-driven rather than a server-enforced geographic restriction.
 
 ---
 
@@ -267,6 +274,7 @@ The knowledge base (`grants-kb`) is also exposed as an MCP server at `/knowledge
 Its instructions tell it to:
 
 - always ground answers in the knowledge base, and never invent programs, amounts, dates or links;
+- default to Queensland applicability unless another jurisdiction is requested, and distinguish the publisher (`source`) from the administering government (not supplied for every business.gov.au listing);
 - work out who is applying (individual, business, community group, council or researcher) and what they need, asking at most one clarifying question;
 - prefer open grants and rank by fit, then by how soon they close;
 - present each grant with its status, closing date, amount, agency, who can apply, a plain-English description and the official link, plus citations;
@@ -274,7 +282,7 @@ Its instructions tell it to:
 
 ```yaml
 name: qld-grants-agent
-description: Helps anyone ... find Queensland Government grants and assistance ...
+description: Helps anyone ... find grants and assistance available in Queensland ...
 metadata:
   welcomeMessage: Queensland Grants Finder      # display name in the Foundry portal
   starterPrompts: |-                            # one prompt per line
@@ -339,6 +347,8 @@ Ingestion is keyless: the connection uses `ProjectManagedIdentity`, and the proj
 
 - **The Serverless tier is in public preview.** There's no SLA, no migration to or from dedicated tiers, and no index aliases, debug sessions or private networking for indexers. Indexers run under a daily execution quota. See [pricing tiers](https://learn.microsoft.com/azure/search/search-sku-tier).
 - The QLD API has no "last modified" field, so changes are detected by content hash.
+- The business.gov.au finder is a public search interface, not a versioned data export API. If its page-scoped search key, query fields or pagination change, the sync fails before modifying blobs. Check the source's terms and rate limits before increasing the schedule.
+- business.gov.au carries federal and state programs, not just federal grants. Its `cloc` location facets can be broader than the title or eligibility (for example an NT-specific program also tagged Queensland), so geographic filtering is a discovery aid, not an eligibility guarantee. Confirm the program's actual location requirements on the linked official listing. The feed does not provide a reliable structured issuing agency or numeric amount.
 - `howToApply` is currently empty in the source data. Opening/closing dates and amounts are present for only about 100 grants.
 - Agency fields are upstream acronyms (e.g. `QH`, `DETSI`).
 

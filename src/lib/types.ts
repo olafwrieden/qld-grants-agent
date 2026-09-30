@@ -39,6 +39,8 @@ export type Dimensions = Record<DimensionKey, RawDimension>;
 /** The normalized document stored in Blob Storage and indexed by Azure AI Search. */
 export interface GrantDocument {
   id: string;
+  source: string;
+  jurisdictions: string[];
   title: string;
   programName: string;
   roundName: string | null;

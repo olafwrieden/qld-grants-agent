@@ -5,6 +5,8 @@
 import { writeFileSync } from 'node:fs';
 import { fetchSnapshot } from '../src/lib/qldClient.js';
 import { buildGrantDocuments } from '../src/lib/transform.js';
+import { fetchBusinessGrants } from '../src/lib/businessClient.js';
+import { normalizeBusinessGrants } from '../src/lib/businessGrants.js';
 import { argValue, loadScriptEnv } from './env.js';
 
 const env = loadScriptEnv();
@@ -12,7 +14,11 @@ const snapshot = await fetchSnapshot({
   baseUrl: env.QLD_API_BASE_URL ?? 'https://api.jus-checklist.services.qld.gov.au/v1/api/legacy/resources/grants',
   apiKey: env.QLD_API_KEY,
 });
-const { fetched, documents, duplicatesRemoved } = buildGrantDocuments(snapshot);
+const qld = buildGrantDocuments(snapshot);
+const business = normalizeBusinessGrants((await fetchBusinessGrants()).results);
+const documents = [...qld.documents, ...business.documents];
+const fetched = qld.fetched + business.fetched;
+const duplicatesRemoved = qld.duplicatesRemoved + business.duplicatesRemoved;
 
 const count = (values: (string | null)[]) =>
   Object.fromEntries(
@@ -23,6 +29,10 @@ const count = (values: (string | null)[]) =>
 console.log({
   fetched,
   duplicatesRemoved,
+  qldDocuments: qld.documents.length,
+  businessDocuments: business.documents.length,
+  availableInQueensland: documents.filter((d) => d.jurisdictions.includes('Queensland')).length,
+  source: count(documents.map((d) => d.source)),
   documents: documents.length,
   open: documents.filter((d) => d.isOpen).length,
   status: count(documents.map((d) => d.status)),

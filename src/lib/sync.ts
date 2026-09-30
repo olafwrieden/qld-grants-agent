@@ -5,6 +5,8 @@ import { fetchSnapshot } from './qldClient.js';
 import { SearchRestClient } from './searchClient.js';
 import { syncGrantsToBlob, type BlobSyncStats } from './blobStore.js';
 import { buildGrantDocuments } from './transform.js';
+import { fetchBusinessGrants } from './businessClient.js';
+import { normalizeBusinessGrants } from './businessGrants.js';
 
 export interface SyncSummary {
   fetched: number;
@@ -25,8 +27,12 @@ export async function runSync(
   const credential = new DefaultAzureCredential();
 
   const snapshot = await fetchSnapshot({ baseUrl: config.qldApiBaseUrl, apiKey: config.qldApiKey });
-  const { fetched, documents, duplicatesRemoved } = buildGrantDocuments(snapshot, now);
-  log(`Fetched ${fetched} grants, ${duplicatesRemoved} duplicates collapsed → ${documents.length} documents.`);
+  const qld = buildGrantDocuments(snapshot, now);
+  const business = normalizeBusinessGrants((await fetchBusinessGrants()).results, now);
+  const documents = [...qld.documents, ...business.documents];
+  const fetched = qld.fetched + business.fetched;
+  const duplicatesRemoved = qld.duplicatesRemoved + business.duplicatesRemoved;
+  log(`Fetched ${qld.fetched} QLD and ${business.fetched} business.gov.au programs; ${duplicatesRemoved} duplicates collapsed → ${documents.length} documents.`);
 
   const container = new BlobServiceClient(config.storageAccountUrl, credential).getContainerClient(config.container);
   const blob = await syncGrantsToBlob(container, documents, { now, retentionDays: config.softDeleteRetentionDays });

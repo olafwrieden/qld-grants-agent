@@ -9,6 +9,7 @@
  *   npm run query -- facets
  *   npm run query -- filtered  "innovation"
  *   npm run query -- agentic   "What open grants can a small business get for hiring apprentices?"
+ *   npm run query -- hybrid "drought" -- --all-jurisdictions  # opt out of the Queensland default
  *
  * Add --raw to print the full JSON response.
  */
@@ -21,10 +22,13 @@ const search = new SearchRestClient(requireEnv(env, 'SEARCH_ENDPOINT'), new Defa
 const index = env.SEARCH_INDEX_NAME;
 const [scenario = 'hybrid', text = 'grants for small business'] = process.argv.slice(2).filter((a) => !a.startsWith('--'));
 const raw = process.argv.includes('--raw');
+const allJurisdictions = process.argv.includes('--all-jurisdictions');
+const LOCATION_FILTER = "jurisdictions/any(j: j eq 'Queensland')";
 
 /** Open = flagged Open and not past its closing date (evaluated at query time, so it never goes stale). */
-const OPEN_FILTER = `status eq 'Open' and (closingDate eq null or closingDate ge ${new Date().toISOString()})`;
-const SELECT = 'id,title,status,closingDate,amount,issuingAgency,assistanceType,categories,url';
+const OPEN_FILTER = `status eq 'Open' and (closingDate eq null or closingDate ge ${new Date().toISOString()})`
+  + (allJurisdictions ? '' : ` and ${LOCATION_FILTER}`);
+const SELECT = 'id,title,source,jurisdictions,status,closingDate,amount,issuingAgency,assistanceType,categories,url';
 const vectorQuery = (t: string, k = 50) => ({ kind: 'text', text: t, fields: 'titleVector,descriptionVector', k });
 
 const queries: Record<string, () => object> = {
@@ -36,7 +40,7 @@ const queries: Record<string, () => object> = {
     search: text,
     vectorQueries: [vectorQuery(text)],
     filter: OPEN_FILTER,
-    facets: ['categories,count:10', 'assistanceType', 'applicantTypes'],
+    facets: ['categories,count:10', 'assistanceType', 'applicantTypes', 'source', 'jurisdictions'],
     select: SELECT,
     top: 10,
     count: true,
@@ -66,10 +70,13 @@ const queries: Record<string, () => object> = {
       'clientGroups,count:40',
       'fundingTypes',
       'businessActivities',
+      'source',
+      'jurisdictions',
       'amount,values:10000|50000|100000|500000|1000000',
       'closingDate,interval:month',
     ],
     top: 0,
+    filter: allJurisdictions ? undefined : LOCATION_FILTER,
     count: true,
   }),
 
@@ -96,7 +103,7 @@ function printHits(data: { value: SearchHit[]; '@odata.count'?: number; '@search
   for (const hit of data.value) {
     const score = hit['@search.rerankerScore'] ?? hit['@search.score'];
     const closing = hit.closingDate ? String(hit.closingDate).slice(0, 10) : 'n/a';
-    console.log(`• [${Number(score).toFixed(3)}] ${hit.title}  (${hit.status}, closes ${closing}, amount ${hit.amount ?? 'n/a'}, ${hit.issuingAgency})`);
+    console.log(`• [${Number(score).toFixed(3)}] ${hit.title}  (${hit.status}, closes ${closing}, amount ${hit.amount ?? 'n/a'}, ${hit.issuingAgency ?? 'agency not stated'}, ${hit.source})`);
   }
   if (data['@search.facets']) {
     for (const [field, buckets] of Object.entries(data['@search.facets'])) {
@@ -118,7 +125,8 @@ if (scenario === 'status') {
     `/knowledgebases/${env.KNOWLEDGE_BASE_NAME}/retrieve`,
     {
       messages: [{ role: 'user', content: [{ type: 'text', text }] }],
-      knowledgeSourceParams: [{ knowledgeSourceName: env.KNOWLEDGE_SOURCE_NAME, kind: 'searchIndex', includeReferenceSourceData: true }],
+      knowledgeSourceParams: [{ knowledgeSourceName: env.KNOWLEDGE_SOURCE_NAME, kind: 'searchIndex', includeReferenceSourceData: true,
+        ...(!allJurisdictions && { filterAddOn: LOCATION_FILTER }) }],
     },
   );
   if (raw) console.log(JSON.stringify(data, null, 2));

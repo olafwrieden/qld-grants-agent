@@ -1,12 +1,14 @@
 {
   "name": "${KNOWLEDGE_SOURCE_NAME}",
   "kind": "searchIndex",
-  "description": "Queensland Government grants and assistance programs, with eligibility, dates, amounts and audience facets.",
+  "description": "Queensland Grants Finder and business.gov.au programs, with location applicability, provenance, eligibility, dates and audience facets.",
   "searchIndexParameters": {
     "searchIndexName": "${SEARCH_INDEX_NAME}",
     "semanticConfigurationName": "grants-semantic",
     "sourceDataFields": [
       { "name": "id" },
+      { "name": "source" },
+      { "name": "jurisdictions" },
       { "name": "title" },
       { "name": "summary" },
       { "name": "eligibility" },

@@ -31,11 +31,12 @@ export function parseRetrievedGrants(output) {
     if (!g?.id || !g?.title) continue;
     grants.push({
       id: String(g.id),
+      source: g.source ?? '',
       title: g.title,
       summary: g.summary ?? '',
       url: g.url ?? '',
       status: g.status ?? (g.isOpen ? 'Open' : ''),
-      isOpen: g.isOpen === true || g.status === 'Open',
+      isOpen: g.isOpen === true,
       openingDate: g.openingDate ?? null,
       closingDate: g.closingDate ?? null,
       amount: typeof g.amount === 'number' ? g.amount : null,

@@ -50,6 +50,8 @@ flowchart LR
   visible countdown.
 - **Grant cards come from the retrieval, not the prose.** The worker parses the `mcp_call` output of the knowledge base
   (id, title, status, dates, agency, url). It then keeps the grants the answer actually mentions (open programs first).
+- **Publisher-specific links.** Queensland Grants Finder cards navigate to that site's detail route. business.gov.au
+  listings open their public business.gov.au detail URL in a new tab; they do not have a Queensland-site detail page.
 
 ## Run it
 
