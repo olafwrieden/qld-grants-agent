@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Grants Finder AI Companion (demo)",
+  "short_name": "Grants AI",
+  "version": "0.1.0",
+  "description": "Throwaway demo: adds an AI companion to the Queensland Government Grants Finder, powered by a Microsoft Foundry agent.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Ask Grants AI",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.grants.services.qld.gov.au/*", "http://localhost/*", "http://127.0.0.1/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.grants.services.qld.gov.au/*"],
+      "js": ["lib/markdown.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["panel.css"],
+      "matches": ["https://www.grants.services.qld.gov.au/*"]
+    }
+  ],
+  "commands": {
+    "toggle-panel": {
+      "suggested_key": { "default": "Alt+G" },
+      "description": "Open or close the Grants AI companion"
+    }
+  },
+  "options_page": "options.html"
+}
