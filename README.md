@@ -1,14 +1,71 @@
-# Grants Agent (Queensland by default)
+# Grants Finder AI Companion
 
-Queensland Grants Finder and [business.gov.au Grants and programs](https://business.gov.au/Grants-and-Programs) listings in **Azure AI Search (FoundryIQ)**, ready for keyword, vector, semantic, hybrid and **agentic retrieval**. The Foundry prompt agent defaults to grants available in Queensland.
+**Describe what you need. Discover support that fits. Keep the conversation as you explore.**
 
-A weekly TypeScript Azure Function pulls the [QLD Grants Finder](https://www.grants.services.qld.gov.au/) API **and** the public business.gov.au finder (Coveo). It normalizes and deduplicates each feed, then stages one JSON document per program in Blob Storage. An AI Search **pull indexer** embeds the title and description with a Microsoft Foundry `text-embedding-3-small` deployment. The results go into a faceted `grants` index, which a FoundryIQ **knowledge base** (`gpt-5.4-mini`) is layered over. The **Queensland Grants Finder agent** (`agents/grants-agent.yaml`) calls that knowledge base through MCP.
+Finding a grant should not start with knowing its name, the agency that runs it, or the right boxes to tick. This project explores a different front door to government support: a conversational companion that helps people discover relevant programs, understand the requirements and follow the official links.
 
-> No UI yet. Explore the index through the Search REST API (see [Querying](#querying)) and talk to the agent from the terminal or the Foundry portal (see [Grants agent](#grants-agent)).
+Built with **Microsoft Foundry**, **FoundryIQ** and **Azure AI Search**, it brings together Queensland Grants Finder and [business.gov.au](https://business.gov.au/Grants-and-Programs) listings, with Queensland as the default starting point.
+
+**[Explore the journey](demo/grants-finder-extension/JOURNEY.md)** · **[Run the demo](demo/grants-finder-extension/README.md#run-it)** · **[Architecture](#architecture)** · **[Deploy](#deploy)** · **[Query the index](#querying)** · **[Grants agent](#grants-agent)**
+
+> **Independent proof of concept, not an official government service.** The screenshots show a locally installed browser extension layered onto the public Queensland Government Grants Finder, not a change to the live website for other visitors. This is a demonstration of the experience, not a production-ready public service or an eligibility decision.
+
+![Grants Finder landing page with an AI search inviting people to describe their needs in their own words](demo/grants-finder-extension/screenshots/01-landing-ai-hero.png)
+
+## The vision: start with a person, not a program name
+
+Meet **Mia, a small cafe owner in Townsville**. Business is picking up and she wants to hire her first apprentice. She has heard there is government support, but does not know where to begin.
+
+> "I run a small cafe in Townsville and want to take on my first apprentice. What support can I get?"
+
+Instead of translating her situation into a set of filters, Mia starts with that question. The companion searches the grants knowledge base, explains the options and stays beside her as she opens a program's details. The original filters and browsing experience remain available throughout.
+
+| From | To |
+|---|---|
+| Guessing program names and applicant categories | Describing a goal in everyday language |
+| Opening results one by one to work out relevance | A shortlist with status, dates, source links and known requirements |
+| Losing the thread between search and detail pages | A conversation that follows the journey |
+| Interpreting eligibility text alone | Asking follow-up questions about the program being viewed |
+| Comparing programs across tabs | Asking what to explore first, with reasons and caveats |
+
+### One conversation, from discovery to next steps
+
+| Moment | What the demo shows |
+|---|---|
+| **Ask** | An inline AI search above the existing checklist, with starter prompts to make the first question easier. |
+| **Explore** | A docked companion, visible search progress, grounded answers and actionable grant cards. The page reflows beside the panel rather than disappearing behind a chat bubble. |
+| **Understand** | A program detail page with contextual follow-ups such as "Am I eligible?" and "Find similar open grants", without restarting the conversation. |
+| **Compare** | AI-pick highlights in the site's results and a follow-up that compares the recommended programs for Mia's situation. |
+| **Keep browsing** | Collapse the companion to an edge tab, use the classic filters, and return to the conversation when needed. |
+
+![Grant detail page with a persistent AI companion, recommended program cards and contextual follow-up questions](demo/grants-finder-extension/screenshots/06-detail-page-ai-pick.png)
+
+**[See the complete 12-step journey with 16:9 screenshots →](demo/grants-finder-extension/JOURNEY.md)**
+
+The walkthrough captures real agent responses from the Queensland-only version of the index. The pipeline now also ingests business.gov.au listings; the screenshots are a record of the demo, not a statement of current program availability.
+
+### Assistance, not an eligibility verdict
+
+The aim is to help people find and understand support, not to promise funding or make decisions on their behalf. The agent is instructed to retrieve before answering, cite sources, state what is unknown and direct people to the official program page. Geographic tags and generated answers are discovery aids; applicants still need to confirm current requirements with the provider.
+
+The broader vision is the same grounded agent wherever someone needs help: embedded natively in a grants site, available in Teams or Microsoft 365 Copilot, or supporting a contact-centre adviser. Those are potential channels, not integrations shipped in this repository.
+
+## What is here today
+
+| Layer | What is implemented | Start here |
+|---|---|---|
+| **Grants data and search** | Weekly two-source ingestion, deduplication, change tracking, facets, keyword/vector/hybrid search and semantic ranking. | [Querying](#querying) |
+| **Grounded grants agent** | A YAML-defined Foundry prompt agent connected to a FoundryIQ knowledge base through MCP, with Application Insights monitoring. | [Grants agent](#grants-agent) |
+| **Experience prototype** | A separate Edge/Chrome extension and local authentication bridge demonstrating the journey on the existing public site. It is not deployed by the infrastructure template. | [Demo setup](demo/grants-finder-extension/README.md) |
+| **Deployment as code** | Bicep infrastructure, JSON search definitions and scripts to publish the search objects and agent. | [Deploy](#deploy) |
+
+The prototype stays separate from the backend: it calls the published agent through the Foundry Responses API and does not change the ingestion, index or agent deployment. You can use the backend entirely without the extension.
 
 ---
 
 ## Architecture
+
+A weekly TypeScript Azure Function pulls the [QLD Grants Finder](https://www.grants.services.qld.gov.au/) API **and** the public business.gov.au finder (Coveo). It normalizes and deduplicates each feed, then stages one JSON document per program in Blob Storage. An AI Search **pull indexer** embeds the title and description with a Microsoft Foundry `text-embedding-3-small` deployment. The results go into a faceted `grants` index, which a FoundryIQ **knowledge base** (`gpt-5.4-mini`) is layered over. The **Queensland Grants Finder agent** ([YAML definition](agents/grants-agent.yaml)) calls that knowledge base through MCP.
 
 ```mermaid
 flowchart LR
@@ -356,4 +413,5 @@ Ingestion is keyless: the connection uses `ProjectManagedIdentity`, and the proj
 
 - Tune relevance: add scoring profiles (e.g. boost closing-soon grants), synonym maps for agency acronyms, and query rewrite.
 - Add evaluation queries with expected results (for both the index and the agent), e.g. with Foundry evaluations.
-- Put a UI on the agent, or publish it to Teams / Microsoft 365 Copilot from the Foundry portal. For an art-of-the-possible preview, see the [Grants Finder AI Companion demo](demo/grants-finder-extension/JOURNEY.md), a browser extension that overlays the agent on the public site.
+- Evolve the [companion prototype](demo/grants-finder-extension/JOURNEY.md) into a production experience with accessibility and user research, a production authentication model, privacy controls and operational safeguards.
+- Explore additional channels such as Teams, Microsoft 365 Copilot or a contact-centre desktop, reusing the grounded agent rather than rebuilding the grants pipeline.
