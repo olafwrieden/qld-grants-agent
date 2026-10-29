@@ -86,6 +86,8 @@ export function normalizeGrant(raw: RawService, lookup: DimensionLookup, now: Da
 
   return {
     id: String(raw.id),
+    source: 'Queensland Grants Finder',
+    jurisdictions: ['Queensland'],
     title: hasDistinctSubProgram ? `${subProgram} – ${name}` : name,
     programName: subProgram ?? name,
     roundName: hasDistinctSubProgram ? name : null,

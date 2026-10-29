@@ -399,8 +399,12 @@
         g.agency ? h('span', { html: icon('landmark', 13) }, g.agency) : null,
       ),
       h('div', { class: 'card-actions' },
-        h('button', { class: 'btn primary', onclick: () => navigate(`/service-details/${g.id}`), html: `View details ${icon('arrowRight', 14)}` }),
-        g.url ? h('a', { class: 'btn', href: g.url, target: '_blank', rel: 'noopener noreferrer', html: `Official site ${icon('external', 13)}` }) : null,
+        g.source === 'business.gov.au'
+          ? h('a', { class: 'btn primary', href: g.url, target: '_blank', rel: 'noopener noreferrer',
+            html: `View on business.gov.au ${icon('external', 13)}` })
+          : h('button', { class: 'btn primary', onclick: () => navigate(`/service-details/${g.id}`), html: `View details ${icon('arrowRight', 14)}` }),
+        g.url && g.source !== 'business.gov.au'
+          ? h('a', { class: 'btn', href: g.url, target: '_blank', rel: 'noopener noreferrer', html: `Official site ${icon('external', 13)}` }) : null,
         h('button', { class: 'btn ghost', title: 'Ask about this grant', onclick: () => ask(`Tell me more about "${g.title}" - who is eligible and how do I apply?`, { withContext: false }), html: `${icon('message', 13)} Ask` }),
       ),
     );

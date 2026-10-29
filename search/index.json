@@ -1,8 +1,10 @@
 {
   "name": "${SEARCH_INDEX_NAME}",
-  "description": "Queensland Government grants and assistance programs (source: Grants Finder API).",
+  "description": "Queensland Grants Finder and business.gov.au grants and assistance programs.",
   "fields": [
     { "name": "id", "type": "Edm.String", "key": true, "filterable": true, "retrievable": true },
+    { "name": "source", "type": "Edm.String", "searchable": true, "filterable": true, "facetable": true },
+    { "name": "jurisdictions", "type": "Collection(Edm.String)", "searchable": true, "filterable": true, "facetable": true },
     { "name": "title", "type": "Edm.String", "searchable": true, "sortable": true, "analyzer": "en.microsoft" },
     { "name": "programName", "type": "Edm.String", "searchable": true, "filterable": true, "facetable": true, "sortable": true, "analyzer": "en.microsoft" },
     { "name": "roundName", "type": "Edm.String", "searchable": true, "filterable": true, "analyzer": "en.microsoft" },
